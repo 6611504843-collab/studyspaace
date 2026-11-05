@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8fc">
+  <title>StudySpace | จัดการงานและตารางเรียน</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="StudySpace หน้าหลัก">
+        <span class="brand-mark">S</span>
+        <span>StudySpace</span>
+      </a>
+      <p class="side-label">เมนูหลัก</p>
+      <nav class="nav">
+        <button class="nav-link active" data-view="overview"><span>▦</span> ภาพรวม</button>
+        <button class="nav-link" data-view="tasks"><span>✓</span> งานของฉัน</button>
+        <button class="nav-link" data-view="timetable"><span>▤</span> ตารางเรียน</button>
+      </nav>
+      <div class="sidebar-note">
+        <div class="note-icon">✦</div>
+        <strong>จัดการเวลาให้ดี</strong>
+        <p>แบ่งเวลาเรียนและทำงานทีละอย่าง แล้วทุกอย่างจะง่ายขึ้น</p>
+      </div>
+      <div class="side-footer">StudySpace · Student planner</div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="todayLabel">STUDENT WORKSPACE</p>
+          <h1 id="pageTitle">ภาพรวม</h1>
+        </div>
+        <button class="primary-btn" id="quickAdd">＋ เพิ่มงานใหม่</button>
+      </header>
+
+      <section class="view active" id="overviewView">
+        <div class="welcome-card">
+          <div>
+            <p class="eyebrow light">YOUR PERSONAL STUDY PLANNER</p>
+            <h2>วางแผนให้ดี<br>แล้วเริ่มต้นวันของคุณ ✨</h2>
+            <p>ติดตามงานที่ต้องทำ และดูตารางเรียนได้ในที่เดียว</p>
+          </div>
+          <div class="welcome-art" aria-hidden="true">✎</div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span class="stat-icon lavender">▤</span><p>งานทั้งหมด</p><strong id="totalCount">0</strong><small>รายการ</small></article>
+          <article class="stat-card"><span class="stat-icon peach">◷</span><p>งานที่ยังไม่เสร็จ</p><strong id="pendingCount">0</strong><small>รายการ</small></article>
+          <article class="stat-card"><span class="stat-icon mint">✓</span><p>งานที่เสร็จแล้ว</p><strong id="doneCount">0</strong><small>รายการ</small></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">KEEP ON TRACK</p><h3>งานที่ต้องทำ</h3></div><button class="text-btn" data-goto="tasks">ดูทั้งหมด →</button></div>
+            <div id="overviewTasks" class="task-list"></div>
+          </section>
+          <section class="panel today-panel">
+            <div class="panel-heading"><div><p class="eyebrow">THIS WEEK</p><h3>ตารางเรียนวันนี้</h3></div><span class="today-dot">● วันนี้</span></div>
+            <div id="todayClasses" class="class-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="tasksView">
+        <div class="section-intro"><div><p class="eyebrow">TASK MANAGER</p><h2>งานของฉัน</h2><p>เพิ่มกำหนดส่งและติดตามสถานะงานของคุณ</p></div><button class="primary-btn" id="addTaskBtn">＋ เพิ่มงาน</button></div>
+        <div class="toolbar">
+          <input id="taskSearch" type="search" placeholder="ค้นหาชื่องานหรือวิชา..." aria-label="ค้นหางาน">
+          <select id="taskFilter" aria-label="กรองงาน"><option value="all">งานทั้งหมด</option><option value="pending">ยังไม่เสร็จ</option><option value="done">เสร็จแล้ว</option></select>
+        </div>
+        <section class="panel"><div id="allTasks" class="task-list"></div></section>
+      </section>
+
+      <section class="view" id="timetableView">
+        <div class="section-intro"><div><p class="eyebrow">WEEKLY SCHEDULE</p><h2>ตารางเรียน</h2><p>จัดตารางเรียนประจำสัปดาห์ของคุณ</p></div><button class="primary-btn" id="addClassBtn">＋ เพิ่มวิชาเรียน</button></div>
+        <div class="schedule-wrap panel">
+          <div class="schedule-grid" id="scheduleGrid"></div>
+        </div>
+        <p class="helper-text">* ข้อมูลตารางเรียนและงานจะถูกบันทึกไว้ในเบราว์เซอร์เครื่องนี้</p>
+      </section>
+
+      <footer class="main-footer">Made for better study days · StudySpace</footer>
+    </main>
+  </div>
+
+  <dialog id="taskDialog" class="modal">
+    <form id="taskForm" class="modal-form">
+      <div class="modal-heading"><div><p class="eyebrow">TASK DETAILS</p><h3 id="taskModalTitle">เพิ่มงานใหม่</h3></div><button type="button" class="close-btn" data-close="taskDialog">×</button></div>
+      <input type="hidden" id="taskId">
+      <label>ชื่องาน<input id="taskName" required maxlength="80" placeholder="เช่น ทำรายงานบทที่ 1"></label>
+      <label>ชื่อวิชา<input id="taskSubject" maxlength="50" placeholder="เช่น การออกแบบเว็บไซต์"></label>
+      <div class="form-row"><label>วันกำหนดส่ง<input id="taskDue" type="date" required></label><label>ความสำคัญ<select id="taskPriority"><option value="normal">ปกติ</option><option value="high">สำคัญ</option></select></label></div>
+      <label>รายละเอียด<textarea id="taskDetails" rows="3" placeholder="รายละเอียดเพิ่มเติม (ไม่บังคับ)"></textarea></label>
+      <div class="modal-actions"><button type="button" class="secondary-btn" data-close="taskDialog">ยกเลิก</button><button class="primary-btn" type="submit">บันทึกงาน</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="classDialog" class="modal">
+    <form id="classForm" class="modal-form">
+      <div class="modal-heading"><div><p class="eyebrow">CLASS DETAILS</p><h3>เพิ่มวิชาเรียน</h3></div><button type="button" class="close-btn" data-close="classDialog">×</button></div>
+      <label>ชื่อวิชา<input id="className" required maxlength="60" placeholder="เช่น ภาษาอังกฤษ"></label>
+      <label>ห้องเรียน / สถานที่<input id="classRoom" maxlength="40" placeholder="เช่น ห้อง 304"></label>
+      <label>วันเรียน<select id="classDay"><option value="1">วันจันทร์</option><option value="2">วันอังคาร</option><option value="3">วันพุธ</option><option value="4">วันพฤหัสบดี</option><option value="5">วันศุกร์</option><option value="6">วันเสาร์</option><option value="0">วันอาทิตย์</option></select></label>
+      <div class="form-row"><label>เวลาเริ่ม<input id="classStart" type="time" required value="09:00"></label><label>เวลาสิ้นสุด<input id="classEnd" type="time" required value="12:00"></label></div>
+      <div class="modal-actions"><button type="button" class="secondary-btn" data-close="classDialog">ยกเลิก</button><button class="primary-btn" type="submit">บันทึกวิชา</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
